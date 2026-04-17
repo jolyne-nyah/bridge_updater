@@ -1,0 +1,31 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "bridge_updater_config_schema",
+    "type": "object",
+    "properties": {
+        "direct": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "properties": {
+                    "dest": {"type": "string"},
+                    "outputs": {
+                        "type": "array",
+                        "items": {"type": "string"}
+                    }
+                },
+                "required": ["dest", "outputs"]
+            }
+        },
+        "repos": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                }
+            }
+        }
+    }
+}

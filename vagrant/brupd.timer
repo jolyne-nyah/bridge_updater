@@ -1,0 +1,17 @@
+# Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
+# This program comes with ABSOLUTELY NO WARRANTY.
+# See <https://gnu.org> for details.
+
+[Unit]
+Description=Bridge Updater Timer Service
+After=network.target
+Wants=network.target
+
+[Timer]
+OnActiveSec=1s
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

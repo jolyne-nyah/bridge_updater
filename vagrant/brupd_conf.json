@@ -1,0 +1,24 @@
+{
+    "direct": {
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/obfs4_72h.txt": {
+            "dest": "/usr/local/src/directs/obfs4_72h.txt",
+            "outputs": ["/etc/tor/torrc.d/obfs4_72h.conf"]
+        },
+
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/obfs4_ipv6_72h.txt": {
+            "dest": "/usr/local/src/directs/obfs4_ipv6_72h.txt",
+            "outputs": ["/etc/tor/torrc.d/obfs4_ipv6_72h.conf"]
+        },
+
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/obfs4_tested.txt": {
+	    	"dest": "/usr/local/src/directs/obfs4_tested.txt",
+	    	"outputs": ["/etc/tor/torrc.d/obfs4_tested.conf"]
+		},
+
+        "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/TOR-BRIDGES/TOR_BRIDGES_OBFS4.txt": {
+        	    "dest": "/usr/local/src/directs/TOR_BRIDGES_OBFS4.txt",
+            	"outputs": ["/etc/tor/torrc.d/TOR_BRIDGES_OBFS4.conf"]
+        }
+    },
+    "repos": {}
+}

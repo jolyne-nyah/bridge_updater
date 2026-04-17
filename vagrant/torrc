@@ -1,0 +1,17 @@
+# Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
+# This program comes with ABSOLUTELY NO WARRANTY.
+# See <https://gnu.org> for details.
+
+UseBridges 1
+ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
+
+SocksPort 0.0.0.0:9050
+
+ControlPort 9051
+CookieAuthentication 1
+
+%include /etc/tor/torrc.d/
+
+#ipv6 support. comment lines below if you don't need it or have issues with it
+SocksPort [::]:9050
+ClientUseIPv6 1

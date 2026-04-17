@@ -1,0 +1,40 @@
+{
+    "direct": {
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/obfs4_72h.txt": {
+        "dest": "/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/obfs4_72h.txt",
+            "outputs": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/obfs4_72h.conf"]
+        },
+
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/obfs4_ipv6_72h.txt": {
+            "dest": "/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/obfs4_ipv6_72h.txt",
+            "outputs": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/obfs4_ipv6_72h.conf"]
+        },
+
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/webtunnel_72h.txt": {
+            "dest": "/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/webtunnel_72h.txt",
+            "outputs": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/webtunnel_72h.conf"]
+        },
+
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/webtunnel_ipv6_72h.txt": {
+            "dest": "/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/webtunnel_ipv6_72h.txt",
+            "outputs": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/webtunnel_ipv6_72h.conf"]
+        },
+
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/vanilla_72h.txt": {
+            "dest": "/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/vanilla_72h.txt",
+            "outputs": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/vanilla_72h.conf"]
+        },
+
+        "https://raw.githubusercontent.com/Delta-Kronecker/Tor-Bridges-Collector/refs/heads/main/bridge/vanilla_ipv6_72h.txt": {
+            "dest": "/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/vanilla_ipv6_72h.txt",
+            "outputs": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/vanilla_ipv6_72h.conf"]
+        }
+    },
+
+    "repos": {
+        "/home/jolyne/data/vpn-configs-for-russia": {
+            "TOR-BRIDGES/TOR_BRIDGES_OBFS4.txt": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/obfs41.txt", "/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/obfs42.txt"],
+            "TOR-BRIDGES/TOR_BRIDGES_TOP100.txt": ["/home/jolyne/Desktop/bridge_updater/test/8cdbbb8/top100.txt"]
+        }
+    }
+}

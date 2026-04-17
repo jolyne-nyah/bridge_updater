@@ -1,0 +1,19 @@
+# Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
+# This program comes with ABSOLUTELY NO WARRANTY.
+# See <https://gnu.org> for details.
+
+[Unit]
+Description=Bridge Updater Service (via Tor)
+After=network-online.target
+Wants=network-online.target
+After=tor@default.service
+
+[Service]
+Type=oneshot
+User=root
+Environment="all_proxy=socks5h://127.0.0.1:9050"
+ExecStartPre=/usr/bin/git config --global http.proxy socks5h://127.0.0.1:9050
+ExecStartPre=/usr/bin/git config --global https.proxy socks5h://127.0.0.1:9050
+ExecStart=/usr/local/bin/bridge_updater update -c /etc/brupd_conf.json -l error
+ExecStopPost=/usr/bin/git config --global --unset http.proxy
+ExecStopPost=/usr/bin/git config --global --unset https.proxy

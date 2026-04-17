@@ -1,0 +1,13 @@
+# Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
+# This program comes with ABSOLUTELY NO WARRANTY.
+# See <https://gnu.org> for details.
+
+/bridge_updater
+*.json
+!conf_example.json
+!config.schema.json
+!vagrant/brupd_conf.json
+.vagrant
+.vscode
+test/
+/rel/
