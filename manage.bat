@@ -1,34 +1,15 @@
-REM Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
-REM This program comes with ABSOLUTELY NO WARRANTY.
-REM See <https://gnu.org> for details.
+:: Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
+:: This program comes with ABSOLUTELY NO WARRANTY.
+:: See <https://gnu.org> for details.
 
 @echo off
+cd /d "%~dp0"
 setlocal enabledelayedexpansion
 
-:lang_select
-cls
-echo Choose language / Выберите язык:
-echo 1. English
-echo 2. Russian
-set /p lang_choice="> "
-
-if "%lang_choice%"=="1" (
-    set "m_title=VAGRANT MANAGEMENT MENU"
-    set "m_prompt=Enter your choice (1-5): "
-    set "m_err_admin=[!] ERROR: Run AS ADMINISTRATOR to manage Vagrant/Symlinks."
-) else if "%lang_choice%"=="2" (
-    chcp 65001 >nul
-    set "m_title=МЕНЮ УПРАВЛЕНИЯ VAGRANT"
-    set "m_prompt=Выберите пункт (1-5): "
-    set "m_err_admin=[!] ОШИБКА: Запустите от имени АДМИНИСТРАТОРА для работы с Vagrant и ссылками."
-) else (
-    goto lang_select
-)
-
 net session >nul 2>&1
-if %errorLevel% neq 0 (
-    echo.
-    echo %m_err_admin%
+if %errorLevel% == 0 (
+    echo [ERROR] Running as Administrator is not allowed!
+    echo Please run this script as a normal user.
     pause
     exit /b
 )
@@ -36,7 +17,7 @@ if %errorLevel% neq 0 (
 :menu
 cls
 echo ===============================
-echo   %m_title%
+echo   VAGRANT MANAGEMENT MENU
 echo ===============================
 echo 1. UP (Start)
 echo 2. HALT (Stop)
@@ -44,7 +25,7 @@ echo 3. DESTROY (Delete)
 echo 4. STATUS
 echo 5. EXIT
 echo ===============================
-set /p choice="%m_prompt%"
+set /p choice="Enter your choice (1-5): "
 
 if "%choice%"=="1" (
     vagrant up

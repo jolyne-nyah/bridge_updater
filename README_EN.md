@@ -15,6 +15,8 @@ The file contents are then transformed and written to output files in the format
 
 The author is not responsible for the use of this utility for malicious purposes or for bypassing blocks.
 
+Also: fully compatible with Zapret and VLESS clients. It is recommended to switch the VLESS client from TUN/VPN mode to proxy mode (this way the tor-proxy of bridge_updater will work faster).
+
 ## Virtualization
 
 The project includes a Vagrant-based virtual environment for easy deployment and operation, which automatically deploys a working Ubuntu machine with Tor proxy installed and everything needed for the program.
@@ -48,8 +50,8 @@ The project includes a Vagrant-based virtual environment for easy deployment and
 
 ### Windows
 
-1. Install Vagrant and VirtualBox manually or run `win_install_deps.ps1` in the project root folder with administrator rights.
-2. Reboot the computer.
+1. Install Vagrant and VirtualBox manually or run `install.bat` in the project root folder with administrator rights.
+2. Reboot the computer (if necessary).
 3. Run `up.bat` to bring up the virtual machine.
 4. Connect to it by running `enter.bat`.
 5. Done.

@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
             vb.gui      = false
         end
 
-        config.vm.synced_folder ".", "/home/vagrant/source"
+        config.vm.synced_folder ".", "/home/vagrant/source", owner: "vagrant", group: "vagrant"
 
         config.vm.provision "shell", inline: <<-SHELL
             
