@@ -6,13 +6,13 @@ package actions
 
 import (
 	"context"
-	"errors"
 	"net"
 	"os/exec"
 	"time"
 
 	l "github.com/jolyne-nyah/bridge_updater/logger"
 	"go.uber.org/zap"
+	"golang.org/x/net/proxy"
 )
 
 type Checker struct {
@@ -70,27 +70,46 @@ func (c *Checker) checkInternetReachabilityOneshot(logger *zap.Logger) bool {
 
 	for _, target := range c.checkInternetReachabilityTargets {
 		go func(t string) {
+			logger.Debug("[section: internet] checking internet reachability", zap.String("target", t))
 
-			logger.Debug(l.Bold("[section: internet]")+" checking internet reachability by connecting to target", zap.String("target", t))
+			baseDialer := &net.Dialer{Timeout: 3 * time.Second}
+			dialer := proxy.FromEnvironmentUsing(baseDialer)
 
-			d := net.Dialer{Timeout: 3 * time.Second}
-			conn, err := d.DialContext(ctx, "tcp", t)
+			type dialResult struct {
+				conn net.Conn
+				err  error
+			}
+			resCh := make(chan dialResult, 1)
+
+			go func() {
+				conn, err := dialer.Dial("tcp", t)
+				resCh <- dialResult{conn, err}
+			}()
+
+			var conn net.Conn
+			var err error
+
+			select {
+			case <-ctx.Done():
+				return
+			case res := <-resCh:
+				conn, err = res.conn, res.err
+			}
 
 			if err != nil {
-				if !errors.Is(err, context.Canceled) {
-					logger.Debug(l.Bold("[section: internet]")+" connection to target failed", zap.String("target", t), zap.Error(err))
+				if ctx.Err() == nil {
+					logger.Debug("[section: internet] connection to target failed", zap.String("target", t), zap.Error(err))
 				}
 				return
 			}
 
 			conn.Close()
-			logger.Debug(l.Bold("[section: internet]")+" connection to target is successful", zap.String("target", t))
+			logger.Debug("[section: internet] connection to target is successful", zap.String("target", t))
 
 			select {
 			case success <- struct{}{}:
 			default:
 			}
-
 		}(target)
 	}
 
