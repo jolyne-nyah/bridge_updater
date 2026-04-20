@@ -27,6 +27,7 @@ The project includes a Vagrant-based virtual environment for easy deployment and
 - If you need to manually edit the configuration for `bridge_updater` before starting the machine, it is located in: `vagrant/brupd_conf.json`. By default, several sources for obfs4 bridges are configured there.
 - Currently, webtunnel bridges are not supported for the Vagrant machine.
 - It is not recommended to use vanilla bridges.
+- Bridges in yggdrasil network are supported by default. You can disable it by: `ygg off`
 - Bridges are updated every hour by default.
 - Tor proxy will be available from the host at: `127.0.0.1:6969` (SOCKS5).
 - If you have Windows, the `win_install_deps.ps1` script will **DISABLE** Hyper-V and Windows Sandbox to avoid conflicts with VirtualBox.
@@ -241,6 +242,15 @@ Shows the current mode of the `brupd` service (via Tor or direct):
 ```bash
 print-service-mode ru
 print-service-mode en
+```
+
+#### Function: `ygg`
+
+Allows enabling or disabling support for bridges in the yggdrasil network. Accepts `on` or `off` argument:
+
+```bash
+ygg on
+ygg off
 ```
 
 #### Additional Commands

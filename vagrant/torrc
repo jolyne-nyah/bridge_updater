@@ -1,6 +1,5 @@
-# Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
-# This program comes with ABSOLUTELY NO WARRANTY.
-# See <https://gnu.org> for details.
+
+#jolyne-nyah's custom tor configuration for bridge_updater's vagrant environment.
 
 UseBridges 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
@@ -13,5 +12,12 @@ CookieAuthentication 1
 %include /etc/tor/torrc.d/
 
 #ipv6 support. comment lines below if you don't need it or have issues with it
+#NOTICE: ygg bridges are only available in ipv6.
 SocksPort [::]:9050
 ClientUseIPv6 1
+
+#yggdrasil bridges support. DO NOT COMMENT/UNCOMMENT THIS ON YOUR OWN!
+#If you want to turn on/off the yggdrasil bridges, 
+#enter the vagrant vm and run the command:
+#ygg on / ygg off 
+#%include /etc/tor/yggbr.conf

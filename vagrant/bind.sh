@@ -74,6 +74,37 @@ reconfigure-daemon(){
     echo -e "Usage: \e[38;5;51mreconfigure-daemon [tor|std]\033[0m"
 }
 
+ygg(){
+    local file="/etc/tor/torrc"
+    local includeline="%include /etc/tor/yggbr.conf"
+
+    if [[ $1 == "on" ]]; then
+
+        sudo systemctl enable --now yggdrasil > /dev/null 2>&1
+        echo -e "\e[38;5;51mygg enabled\033[0m"
+
+        sudo sed -i "s|^#\s*\($includeline\)|\1|" "$file"
+        echo -e "\e[38;5;51mygg bridges included in tor config\033[0m"
+
+        sudo systemctl reload tor@default > /dev/null 2>&1
+        echo -e "\e[38;5;51mtor reloaded\033[0m"
+
+    elif [[ $1 == "off" ]]; then
+
+        sudo systemctl disable --now yggdrasil > /dev/null 2>&1
+        echo -e "\e[38;5;51mygg disabled\033[0m"
+
+        sudo sed -i "s|^\s*\($includeline\)|#\1|" "$file"
+        echo -e "\e[38;5;51mygg bridges excluded from tor config\033[0m"
+
+        sudo systemctl reload tor@default > /dev/null 2>&1
+        echo -e "\e[38;5;51mtor reloaded\033[0m"
+
+    else
+        echo -e "Usage: \e[38;5;51mygg [on|off]\033[0m"
+    fi
+}
+
 brupd-info(){
 
     if [[ $1 == "ru" ]]; then
@@ -121,7 +152,10 @@ brupd-info(){
         echo -e "    Перезапуск: \e[38;5;51mrestart\033[0m"
         echo -e "    Журнал:     \e[38;5;51mjournal\033[0m\n"
 
+        echo -e "14. Включить/выключить yggdrasil мосты: \e[38;5;51mygg [on|off]\033[0m\n"
+
         echo -e "Наслаждайся. \n"
+        return
     fi
     
     if [[ $1 == "en" ]]; then
@@ -169,8 +203,13 @@ brupd-info(){
         echo -e "    Restart:    \e[38;5;51mrestart\033[0m"
         echo -e "    Journal:    \e[38;5;51mjournal\033[0m\n"
 
+        echo -e "14. To enable/disable yggdrasil bridges, run: \e[38;5;51mygg [on|off]\033[0m\n"
+
         echo -e "Enjoy. \n"
+        return
     fi
+
+    echo -e "Usage: \e[38;5;51mbrupd-info [en|ru]\033[0m"
 }
 
 brupd-info en
