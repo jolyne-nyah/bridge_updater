@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
 
         config.vm.box = "ubuntu/jammy64"
 
-        config.vm.network "forwarded_port", guest: 9050, host: 6969
+        config.vm.network "forwarded_port", guest: 9050, host: 6969, host_ip: "127.0.0.1", id: "tor-proxy"
         config.vm.network "private_network", ip: "192.168.56.10"
 
         config.vm.hostname = "tor-proxy-server"
@@ -67,12 +67,21 @@ Vagrant.configure("2") do |config|
             echo -e "\nSECTION: GO INSTALLATION FINISHED"
 
             #export configs from source
+            
             cp /home/vagrant/source/vagrant/brupd_conf.json /etc/brupd_conf.json
+            
             cp /home/vagrant/source/vagrant/brupd.service /etc/systemd/system/brupd.service
             cp /home/vagrant/source/vagrant/brupd.timer /etc/systemd/system/brupd.timer
+            
             cp /home/vagrant/source/vagrant/brupd-tor.service /etc/systemd/system/brupd-tor.service
             cp /home/vagrant/source/vagrant/brupd-tor.timer /etc/systemd/system/brupd-tor.timer
+            
             cat /home/vagrant/source/vagrant/torrc | tee -a /etc/tor/torrc > /dev/null
+
+            #sysctl keepalive settings
+            cp /home/vagrant/source/vagrant/99-tcp-keepalive.conf /etc/sysctl.d/99-tcp-keepalive.conf
+            sysctl -p /etc/sysctl.d/99-tcp-keepalive.conf
+
 
             #binary installation
             echo -e "\nSECTION: BRIDGE_UPDATER BINARY INSTALLATION \n"
@@ -125,7 +134,8 @@ Vagrant.configure("2") do |config|
 
             systemctl enable --now ufw
             INTERFACE=$(ip route get 1 | awk '{print $5; exit}')
-            ufw allow in on $INTERFACE to any port 22 proto tcp comment 'safe vagrant ssh' 
+            ufw allow in on $INTERFACE to any port 22 proto tcp comment 'vagrant ssh access'
+            ufw allow in on $INTERFACE to any port 9050 proto tcp comment 'tor proxy access' 
             ufw deny in on ygg0 comment 'block ygg inbound'
             ufw --force enable
 
