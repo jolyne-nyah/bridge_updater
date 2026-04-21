@@ -11,3 +11,4 @@
 .vscode
 test/
 /rel/
+*.log
