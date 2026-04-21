@@ -13,9 +13,37 @@
 
 The file contents are then transformed and written to output files in the format expected by Tor.
 
-The author is not responsible for the use of this utility for malicious purposes or for bypassing blocks.
+Also: partially compatible with Zapret and almost compatible with VLESS clients. It is recommended to switch the VLESS client from TUN/VPN mode to proxy mode (this way the tor-proxy of bridge_updater will work faster). About Zapret: see the details below.
 
-Also: fully compatible with Zapret and VLESS clients. It is recommended to switch the VLESS client from TUN/VPN mode to proxy mode (this way the tor-proxy of bridge_updater will work faster).
+## DISCLAIMER
+
+- This is a pet project for demonstration author's skills in working with `golang` (including goroutines usage), `git`, `bash`, and `vagrant`.
+- The author is not responsible for the use of this utility for malicious purposes or for bypassing blocks, and they do not welcome usage of the program this way.
+- The Vagrant virtual environment is provided for comfortable testing of `bridge_updater` exclusively, because it was developed for usage on Linux systems natively.
+- Yggdrasil bridges are used to provide stable connection to Tor for testing and demonstration of correct work of function `checkInternetReachabilityOneshot` from module `actions/checker.go` through the proxy, and functions from module `actions/fetcher.go` (through the proxy).
+- Usage cases of the program to get an access to public resources are listed to make testing more comfortable and to demonstrate corerct work of Tor, and, as a consequence, to demonstrate that `actions/writer.go` module works fine with Tor configuration.
+- The case of this program usage to make the Tor Browser get an access to the Tor is given to demonstrate the correct processing the bridges fetched by the program.
+
+## Cases of usage
+
+Almost all the apps that are compatible with custom proxy settings can use this `SOCKS5` proxy with address `127.0.0.1` and port `6969`. All listed below cases are relevant for usage with provided Vagrant virtual environment.
+
+### Exact examples
+
+- Telegram: yes. But notice that calls will not work. To set it up: Settings -> Advanced settings -> Connection type -> Add proxy -> type `SOCKS5`, host `127.0.0.1`, port `6969`
+- Discord: no. Use another instruments to get an access (for example, [zapret-discord-youtube](https://github.com/Flowseal/zapret-discord-youtube))
+- Keybase: yes. Add as a proxy in advanced settings like in Telegram.
+- Internet white lists bypass: no. Use VLESS client with specified configs instead.
+- Browser: yes. Install the FoxyProxy extension and add the `SOCKS5` proxy, host `127.0.0.1`, port `6969`, allow proxy DNS. Don't use Yandex Browser.
+  - ChatGPT: yes.
+  - Google Gemini: yes.
+  - Anthropic: yes.
+  - TikTok: yes.
+  - Youtube: yes. Important: if you use [zapret-discord-youtube](https://github.com/Flowseal/zapret-discord-youtube), then turn off the tor proxy for the browser where you're going to watch Youtube, or turn off zapret, or use two different browsers: one for Youtube (with no proxy) and another one for other resources (with proxy).
+  - Tor Browser: yes. Just enter the machine via `vagrant ssh` or `enter.bat`, type command `bridges`, then copy and paste some of them into the bridges section in connection settings (check the Vagrant Machine Management Guide topic below). Don't use `127.0.0.1:6969` as a proxy in Tor Browser!
+  - .onion addresses: possible, but strongly discouraged. Use Tor Browser instead.
+  - Spotify, Soundcloud: possible, but not comfortable. Better use any VLESS client in proxy mode (to keep this proxy fast) instead.
+  - Any russian service (Ozon, Wildberries, Yandex,..): no.
 
 ## Virtualization
 
@@ -27,7 +55,7 @@ The project includes a Vagrant-based virtual environment for easy deployment and
 - If you need to manually edit the configuration for `bridge_updater` before starting the machine, it is located in: `vagrant/brupd_conf.json`. By default, several sources for obfs4 bridges are configured there.
 - Currently, webtunnel bridges are not supported for the Vagrant machine.
 - It is not recommended to use vanilla bridges.
-- Bridges in yggdrasil network are supported by default. You can disable it by: `ygg off`
+- In the very worst case, when all the fetched bridges are unacessible, the bridges in Yggdrasil network support is also provided. You can disable it by: `ygg off`
 - Bridges are updated every hour by default.
 - Tor proxy will be available from the host at: `127.0.0.1:6969` (SOCKS5).
 - If you have Windows, the `win_install_deps.ps1` script will **DISABLE** Hyper-V and Windows Sandbox to avoid conflicts with VirtualBox.
@@ -64,16 +92,6 @@ The project includes a Vagrant-based virtual environment for easy deployment and
 3. Start the virtual machine: `vagrant up`
 4. Connect to it: `vagrant ssh`
 5. Done.
-
-### Usage
-
-#### Telegram example
-
-Settings -> Advanced settings -> Connection type -> Add proxy -> type `SOCKS5`, host `127.0.0.1`, port `6969`.
-
-#### Browser example
-
-Install the FoxyProxy extension. In its settings, add a `SOCKS5` proxy with address `127.0.0.1` and port `6969`.
 
 ## Commands
 
@@ -253,12 +271,22 @@ ygg on
 ygg off
 ```
 
+#### Function `journal`
+
+Allows you to view the logs of the Tor service. The first argument can be `bootstrap` (only view bootstrap logs) or `all` (view all logs). Also, you can use additional flag `-i` to vew the logs in interactive mode:
+
+```bash
+journal bootstrap
+journal all
+journal bootstrap -i
+journal all -i
+```
+
 #### Additional Commands
 
 - `ipcheck` — check the current IP address of the Tor exit node
 - `status` — check the Tor service status
 - `restart` — restart the Tor service
-- `journal` — view Tor service logs
 - `bridges` — show all currently configured bridges
 - `sudo nyx` — launch the Tor network monitor
 

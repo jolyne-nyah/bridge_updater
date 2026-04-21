@@ -21,3 +21,10 @@ ClientUseIPv6 1
 #enter the vagrant vm and run the command:
 #ygg on / ygg off 
 #%include /etc/tor/yggbr.conf
+
+#trusted nodes
+ExitNodes {us},{de},{nl},{ch},{fr}
+StrictNodes 1
+
+#qf for streaming services
+MaxCircuitDirtiness 3600

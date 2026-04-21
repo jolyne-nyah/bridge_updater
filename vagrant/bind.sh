@@ -7,8 +7,37 @@ alias brupd="sudo bridge_updater -c /etc/brupd_conf.json -l info"
 alias ipcheck="all_proxy=socks5h://127.0.0.1:9050 curl -s https://check.torproject.org/api/ip | jq -r '.IP'"
 alias status="sudo systemctl status tor@default --no-pager"
 alias restart="sudo systemctl restart tor@default"
-alias journal="sudo journalctl -e -u tor@default"
 alias bridges="echo && sudo tail -n +1 /etc/tor/torrc.d/* | grep --color=always -E '^==> .* <==|$'"
+
+journal() {
+
+    local bootstrap_arg=()
+    local mode_arg=()
+
+    if [[ $1 == "bootstrap" ]]; then
+        bootstrap_arg=(-g "Bootstrapped")
+    elif [[ $1 == "all" ]]; then
+        bootstrap_arg=()
+    else
+        echo -e "Usage: \e[38;5;51mjournal [bootstrap|all] [-i]\033[0m"
+        return
+    fi
+
+    shift
+
+    if [[ $1 == "-i" ]]; then
+        mode_arg=(-f -n 50)
+    elif [[ $1 == "" ]]; then
+        mode_arg=(-e)
+    else
+        echo -e "Usage: \e[38;5;51mjournal [bootstrap|all] [-i]\033[0m"
+        return
+    fi
+
+    echo -e "\n\e[38;5;51mCtrl + C\033[0m to exit the journal view.\n"
+
+    sudo journalctl ${mode_arg[@]} -u tor@default ${bootstrap_arg[@]}
+}
 
 brupd-tor(){
     git config --global http.proxy socks5h://127.0.0.1:9050
@@ -150,7 +179,7 @@ brupd-info(){
         echo -e "13. Команды для tor service:"
         echo -e "    Статус:     \e[38;5;51mstatus\033[0m"
         echo -e "    Перезапуск: \e[38;5;51mrestart\033[0m"
-        echo -e "    Журнал:     \e[38;5;51mjournal\033[0m\n"
+        echo -e "    Журнал:     \e[38;5;51mjournal [bootstrap|all] [-i]\033[0m\n"
 
         echo -e "14. Включить/выключить yggdrasil мосты: \e[38;5;51mygg [on|off]\033[0m\n"
 
@@ -201,7 +230,7 @@ brupd-info(){
         echo -e "13. Some commands for tor service:"
         echo -e "    Status:     \e[38;5;51mstatus\033[0m"
         echo -e "    Restart:    \e[38;5;51mrestart\033[0m"
-        echo -e "    Journal:    \e[38;5;51mjournal\033[0m\n"
+        echo -e "    Journal:    \e[38;5;51mjournal [bootstrap|all] [-i]\033[0m\n"
 
         echo -e "14. To enable/disable yggdrasil bridges, run: \e[38;5;51mygg [on|off]\033[0m\n"
 
