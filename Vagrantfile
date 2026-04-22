@@ -29,6 +29,11 @@ Vagrant.configure("2") do |config|
             
             echo "=== Basic provisioning the Tor Proxy Server VM... ==="
 
+            fallocate -l 1G /swapfile
+            chmod 600 /swapfile
+            mkswap /swapfile
+            swapon /swapfile
+
             #https transport for apt
             echo -e "\nSECTION: APT-TRANSPORT SWITCH \n"
 
@@ -154,7 +159,7 @@ Vagrant.configure("2") do |config|
 
             curl -sSf https://sh.rustup.rs -o rustup-init.sh
             chmod +x rustup-init.sh
-            ./rustup-init.sh -y
+            ./rustup-init.sh -y --profile minimal
             source "$HOME/.cargo/env"
             rm rustup-init.sh
 
@@ -197,6 +202,9 @@ Vagrant.configure("2") do |config|
             sed -i 's|^#%include /etc/tor/yggbr.conf|%include /etc/tor/yggbr.conf|' /etc/tor/torrc
 
             systemctl reload tor@default
+
+            swapoff /swapfile
+            rm /swapfile
 
             echo -e "=== Yggdrasil features provisioning completed! ==="
         SHELL
