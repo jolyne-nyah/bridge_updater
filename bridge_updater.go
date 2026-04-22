@@ -45,10 +45,12 @@ func main() {
 	var reposOnly bool
 	var directOnly bool
 	var ignoreInternetReachabilityTests bool
+	var doNotReloadTor bool
 
 	rootCmd.PersistentFlags().BoolVarP(&reposOnly, "repos-only", "r", false, "Run only the repos fetching/writing")
 	rootCmd.PersistentFlags().BoolVarP(&directOnly, "direct-only", "d", false, "Run only the direct fetching/writing")
 	rootCmd.PersistentFlags().BoolVarP(&ignoreInternetReachabilityTests, "ignore-internet-reachability-tests", "i", false, "Ignore internet reachability tests")
+	rootCmd.PersistentFlags().BoolVarP(&doNotReloadTor, "no-tor-reload", "t", false, "Do not reload Tor after updating the bridges")
 
 	var logger *zap.Logger
 	var config *c.Config
@@ -91,6 +93,10 @@ func main() {
 		Use:   "fetch",
 		Short: "Fetch the latest bridge information",
 		Run: func(cmd *cobra.Command, args []string) {
+			if doNotReloadTor {
+				logger.Warn(" --no-tor-reload flag is set, but will be ignored while running one of the following commands: check, fetch")
+			}
+
 			if err := runner.Fetch(false, logger); err != nil {
 				os.Exit(1)
 			}
@@ -101,7 +107,7 @@ func main() {
 		Use:   "write",
 		Short: "Write the fetched information to the output file",
 		Run: func(cmd *cobra.Command, args []string) {
-			if err := runner.Write(false, logger); err != nil {
+			if err := runner.Write(false, doNotReloadTor, logger); err != nil {
 				os.Exit(1)
 			}
 		},
@@ -111,7 +117,7 @@ func main() {
 		Use:   "update",
 		Short: "Fetch the latest bridge info and write it to file",
 		Run: func(cmd *cobra.Command, args []string) {
-			if err := runner.FullRun(logger); err != nil {
+			if err := runner.FullRun(doNotReloadTor, logger); err != nil {
 				os.Exit(1)
 			}
 		},
@@ -121,6 +127,10 @@ func main() {
 		Use:   "check",
 		Short: "Check the configuration file for errors",
 		Run: func(cmd *cobra.Command, args []string) {
+			if doNotReloadTor {
+				logger.Warn(" --no-tor-reload flag is set, but will be ignored while running one of the following commands: check, fetch")
+			}
+
 			if reposOnly || directOnly {
 				logger.Warn(" --repos-only and --direct-only flags are ignored when running the check command")
 			}

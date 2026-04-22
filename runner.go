@@ -41,13 +41,17 @@ func (r *Runner) CommonCheck(checkInternet bool, logger *zap.Logger) error {
 
 	var g errgroup.Group
 
-	g.Go(func() error {
-		return r.actions.Checker.CheckGit(logger)
-	})
+	if r.runRepos && len(r.actions.Conf.Repos) > 0 {
+		g.Go(func() error {
+			return r.actions.Checker.CheckGit(logger)
+		})
+	}
 
-	g.Go(func() error {
-		return r.actions.Checker.CheckCurl(logger)
-	})
+	if r.runDirect && len(r.actions.Conf.Direct) > 0 {
+		g.Go(func() error {
+			return r.actions.Checker.CheckCurl(logger)
+		})
+	}
 
 	g.Go(func() error {
 		return r.actions.Conf.Validate(logger)
@@ -77,13 +81,13 @@ func (r *Runner) Fetch(alreadyCheckedCommon bool, logger *zap.Logger) error {
 
 	var g errgroup.Group
 
-	if r.runRepos {
+	if r.runRepos && len(r.actions.Conf.Repos) > 0 {
 		g.Go(func() error {
 			return r.actions.Fetcher.FetchRepos(logger)
 		})
 	}
 
-	if r.runDirect {
+	if r.runDirect && len(r.actions.Conf.Direct) > 0 {
 		g.Go(func() error {
 			return r.actions.Fetcher.FetchDirects(logger)
 		})
@@ -92,7 +96,7 @@ func (r *Runner) Fetch(alreadyCheckedCommon bool, logger *zap.Logger) error {
 	return g.Wait()
 }
 
-func (r *Runner) Write(alreadyChecked bool, logger *zap.Logger) error {
+func (r *Runner) Write(alreadyChecked bool, doNotReloadTor bool, logger *zap.Logger) error {
 	if !alreadyChecked {
 		if err := r.CommonCheck(false, logger); err != nil {
 			return err
@@ -101,13 +105,13 @@ func (r *Runner) Write(alreadyChecked bool, logger *zap.Logger) error {
 
 	var g errgroup.Group
 
-	if r.runRepos {
+	if r.runRepos && len(r.actions.Conf.Repos) > 0 {
 		g.Go(func() error {
 			return r.actions.Writer.WriteSectionRepos(logger)
 		})
 	}
 
-	if r.runDirect {
+	if r.runDirect && len(r.actions.Conf.Direct) > 0 {
 		g.Go(func() error {
 			return r.actions.Writer.WriteSectionDirect(logger)
 		})
@@ -117,10 +121,14 @@ func (r *Runner) Write(alreadyChecked bool, logger *zap.Logger) error {
 		return err
 	}
 
+	if doNotReloadTor {
+		return nil
+	}
+
 	return r.actions.ReloadTor(logger)
 }
 
-func (r *Runner) FullRun(logger *zap.Logger) error {
+func (r *Runner) FullRun(doNotReloadTor bool, logger *zap.Logger) error {
 
 	if err := r.CommonCheck(!r.ignoreInternetReachabilityTests, logger); err != nil {
 		return err
@@ -128,7 +136,7 @@ func (r *Runner) FullRun(logger *zap.Logger) error {
 
 	var g errgroup.Group
 
-	if r.runRepos {
+	if r.runRepos && len(r.actions.Conf.Repos) > 0 {
 		g.Go(func() error {
 			if err := r.actions.FullProcessRepos(logger); err != nil {
 				return err
@@ -138,7 +146,7 @@ func (r *Runner) FullRun(logger *zap.Logger) error {
 		})
 	}
 
-	if r.runDirect {
+	if r.runDirect && len(r.actions.Conf.Direct) > 0 {
 		g.Go(func() error {
 
 			if err := r.actions.FullProcessDirect(logger); err != nil {
@@ -151,6 +159,10 @@ func (r *Runner) FullRun(logger *zap.Logger) error {
 
 	if err := g.Wait(); err != nil {
 		return err
+	}
+
+	if doNotReloadTor {
+		return nil
 	}
 
 	return r.actions.ReloadTor(logger)

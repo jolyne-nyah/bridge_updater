@@ -109,8 +109,10 @@ The utility supports the following commands:
 - `-r, --repos-only` — execute only the `repos` section
 - `-d, --direct-only` — execute only the `direct` section
 - `-i, --ignore-internet-reachability-tests` — skip internet reachability tests
+- `-t, --no-tor-reload` — do not reload Tor after `write` or `update` command.
 
-> The `--repos-only` and `--direct-only` flags cannot be used simultaneously.
+> The `--repos-only` and `--direct-only` flags cannot be used simultaneously. Also they are ignored automatically, if the `check` command is run.
+> The `--no-tor-reload` flag is ignored automatically if one of the following commands is run: `check`, `fetch`.
 
 ## Manual Configuration
 
@@ -264,11 +266,23 @@ print-service-mode en
 
 #### Function: `ygg`
 
-Allows enabling or disabling support for bridges in the yggdrasil network. Accepts `on` or `off` argument:
+Allows enabling or disabling support for bridges in the yggdrasil network or using yggdrasil bridges only. Accepts `on`, `off` or `only` argument:
 
 ```bash
 ygg on
 ygg off
+ygg only
+```
+
+#### Function `journal`
+
+Allows you to view the logs of the Tor service. The first argument can be `bootstrap` (only view bootstrap logs) or `all` (view all logs). Also, you can use additional flag `-i` to view the logs in interactive mode:
+
+```bash
+journal bootstrap
+journal all
+journal bootstrap -i
+journal all -i
 ```
 
 #### Function `journal`

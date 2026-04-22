@@ -145,9 +145,11 @@ func (c *Config) Validate(logger *zap.Logger) error {
 
 	var g errgroup.Group
 
-	g.Go(func() error {
-		return c.validateReposSection(logger)
-	})
+	if len(c.Repos) > 0 {
+		g.Go(func() error {
+			return c.validateReposSection(logger)
+		})
+	}
 
 	g.Go(func() error {
 		return c.validateFilesUniqueness(logger)

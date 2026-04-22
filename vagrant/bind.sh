@@ -105,33 +105,40 @@ reconfigure-daemon(){
 
 ygg(){
     local file="/etc/tor/torrc"
-    local includeline="%include /etc/tor/yggbr.conf"
+    
+    local yggincludeline="%include /etc/tor/yggbr.conf"
+    local stdincludeline="%include /etc/tor/torrc.d/"
 
-    if [[ $1 == "on" ]]; then
+    if [[ $1 == "on" || $1 == "only" ]]; then
 
         sudo systemctl enable --now yggdrasil > /dev/null 2>&1
         echo -e "\e[38;5;51mygg enabled\033[0m"
 
-        sudo sed -i "s|^#\s*\($includeline\)|\1|" "$file"
+        sudo sed -i "s|^#\s*\($yggincludeline\)|\1|" "$file"
         echo -e "\e[38;5;51mygg bridges included in tor config\033[0m"
 
-        sudo systemctl reload tor@default > /dev/null 2>&1
-        echo -e "\e[38;5;51mtor reloaded\033[0m"
+        if [[ $1 == "only" ]]; then
+            sudo sed -i "s|^\s*\($stdincludeline\)|#\1|" "$file"
+            echo -e "\e[38;5;51mstd bridges excluded from tor config\033[0m"
+        fi
 
     elif [[ $1 == "off" ]]; then
 
         sudo systemctl disable --now yggdrasil > /dev/null 2>&1
         echo -e "\e[38;5;51mygg disabled\033[0m"
 
-        sudo sed -i "s|^\s*\($includeline\)|#\1|" "$file"
+        sudo sed -i "s|^\s*\($yggincludeline\)|#\1|" "$file"
         echo -e "\e[38;5;51mygg bridges excluded from tor config\033[0m"
 
-        sudo systemctl reload tor@default > /dev/null 2>&1
-        echo -e "\e[38;5;51mtor reloaded\033[0m"
+        sudo sed -i "s|^#\s*\($stdincludeline\)|\1|" "$file"
+        echo -e "\e[38;5;51mstd bridges included in tor config\033[0m"
 
     else
-        echo -e "Usage: \e[38;5;51mygg [on|off]\033[0m"
+        echo -e "Usage: \e[38;5;51mygg [on|off|only]\033[0m"
     fi
+
+    sudo systemctl reload tor@default > /dev/null 2>&1
+    echo -e "\e[38;5;51mtor reloaded\033[0m"
 }
 
 brupd-info(){
@@ -181,7 +188,7 @@ brupd-info(){
         echo -e "    Перезапуск: \e[38;5;51mrestart\033[0m"
         echo -e "    Журнал:     \e[38;5;51mjournal [bootstrap|all] [-i]\033[0m\n"
 
-        echo -e "14. Включить/выключить yggdrasil мосты: \e[38;5;51mygg [on|off]\033[0m\n"
+        echo -e "14. Включить / выключить / использовать только yggdrasil мосты: \e[38;5;51mygg [on|off|only]\033[0m\n"
 
         echo -e "Наслаждайся. \n"
         return
@@ -232,7 +239,7 @@ brupd-info(){
         echo -e "    Restart:    \e[38;5;51mrestart\033[0m"
         echo -e "    Journal:    \e[38;5;51mjournal [bootstrap|all] [-i]\033[0m\n"
 
-        echo -e "14. To enable/disable yggdrasil bridges, run: \e[38;5;51mygg [on|off]\033[0m\n"
+        echo -e "14. To enable/disable yggdrasil bridges / use only yggdrasil bridges, run: \e[38;5;51mygg [on|off|only]\033[0m\n"
 
         echo -e "Enjoy. \n"
         return
