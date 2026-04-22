@@ -180,16 +180,20 @@ Vagrant.configure("2") do |config|
 
             echo -e "\nSECTION: PEERS_UPDATER INSTALLATION AND FETCHING PEERS FINISHED"
 
-            #copy yggdrasil bridges and reconfigure tor
+            #rust deinstallation
+            echo -e "\nSECTION: RUST & BUILD-ESSENTIAL DEINSTALLATION\n"
 
-            echo -e "\nSECTION: RECONFIGURING TOR\n"            
+            rustup self uninstall -y
+            apt-get purge -y build-essential && apt-get autoremove -y
+
+            echo -e "\nSECTION: RUST & BUILD-ESSENTIAL DEINSTALLATION FINISHED\n"
+
+            #copy yggdrasil bridges and reconfigure tor            
 
             cp /home/vagrant/source/vagrant/yggbr.conf /etc/tor/yggbr.conf
             sed -i 's|^#%include /etc/tor/yggbr.conf|%include /etc/tor/yggbr.conf|' /etc/tor/torrc
 
             systemctl reload tor@default
-
-            echo -e "\nSECTION: RECONFIGURING TOR FINISHED\n"
 
             echo -e "=== Yggdrasil features provisioning completed! ==="
         SHELL

@@ -285,17 +285,6 @@ journal bootstrap -i
 journal all -i
 ```
 
-#### Function `journal`
-
-Allows you to view the logs of the Tor service. The first argument can be `bootstrap` (only view bootstrap logs) or `all` (view all logs). Also, you can use additional flag `-i` to vew the logs in interactive mode:
-
-```bash
-journal bootstrap
-journal all
-journal bootstrap -i
-journal all -i
-```
-
 #### Additional Commands
 
 - `ipcheck` — check the current IP address of the Tor exit node
