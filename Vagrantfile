@@ -29,10 +29,19 @@ Vagrant.configure("2") do |config|
             
             echo "=== Basic provisioning the Tor Proxy Server VM... ==="
 
+            echo -e "\nSECTION: CREATING SWAPFILE\n"
+
             fallocate -l 1G /swapfile
             chmod 600 /swapfile
             mkswap /swapfile
             swapon /swapfile
+
+            #backup old fstab
+            cp /etc/fstab /etc/fstab.backup
+
+            echo '/swapfile none swap sw 0 0' | tee -a /etc/fstab
+
+            echo -e "\nSECTION: CREATING SWAPFILE FINISHED"
 
             #https transport for apt
             echo -e "\nSECTION: APT-TRANSPORT SWITCH \n"
@@ -202,9 +211,6 @@ Vagrant.configure("2") do |config|
             sed -i 's|^#%include /etc/tor/yggbr.conf|%include /etc/tor/yggbr.conf|' /etc/tor/torrc
 
             systemctl reload tor@default
-
-            swapoff /swapfile
-            rm /swapfile
 
             echo -e "=== Yggdrasil features provisioning completed! ==="
         SHELL
