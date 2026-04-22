@@ -78,6 +78,9 @@ Vagrant.configure("2") do |config|
             
             cat /home/vagrant/source/vagrant/torrc | tee -a /etc/tor/torrc > /dev/null
 
+            #brupd-tor onfailure std status
+            touch /etc/brupd-onfailure
+
             #sysctl keepalive settings
             cp /home/vagrant/source/vagrant/99-tcp-keepalive.conf /etc/sysctl.d/99-tcp-keepalive.conf
             sysctl -p /etc/sysctl.d/99-tcp-keepalive.conf

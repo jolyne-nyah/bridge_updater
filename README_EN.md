@@ -285,6 +285,16 @@ journal bootstrap -i
 journal all -i
 ```
 
+#### Function `brupd-tor-onfailure`
+
+Allows you to control `brupd-tor.service` behavior. Accepts `brupd`, `none` or `status` argument. `brupd` will enable trying to perform `brupd.service` on `brupd-tor.service` failure and try to fetch bridges from sourcces not using tor (behavior by default). `none` will disable this feature. `status` will print current behavior of the `brupd-tor.service`.
+
+```bash
+brupd-tor-onfailure brupd
+brupd-tor-onfailure none
+brupd-tor-onfailure status
+```
+
 #### Additional Commands
 
 - `ipcheck` — check the current IP address of the Tor exit node

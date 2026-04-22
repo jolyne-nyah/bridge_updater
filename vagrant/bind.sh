@@ -103,6 +103,42 @@ reconfigure-daemon(){
     echo -e "Usage: \e[38;5;51mreconfigure-daemon [tor|std]\033[0m"
 }
 
+brupd-tor-onfailure() {
+
+    local line="OnFailure=brupd.service"
+    local file="/etc/systemd/system/brupd-tor.service"
+    local control_file="/etc/brupd-onfailure"
+    local cyan="\e[38;5;51m"
+    local reset="\033[0m"
+
+    case "$1" in
+        brupd)
+            sudo sed -i "s|^#\s*\(OnFailure=.*\)|\1|" "$file"
+            sudo touch "$control_file"
+            sudo systemctl daemon-reload
+            echo -e "Status updated: ${cyan}try brupd.service on failure${reset}"
+            ;;
+        none)
+            sudo sed -i "s|^\s*\(OnFailure=.*\)|#\1|" "$file"
+            sudo rm -f "$control_file"
+            sudo systemctl daemon-reload
+            echo -e "Status updated: ${cyan}do nothing on failure${reset}"
+            ;;
+        status)
+            if [ -f "$control_file" ]; then
+                echo -e "Current status: ${cyan}try brupd.service on failure${reset}"
+            else
+                echo -e "Current status: ${cyan}do nothing on failure${reset}"
+            fi
+            ;;
+        *)
+            echo -e "Usage: ${cyan}brupd-tor-onfailure [brupd|none|status]${reset}"
+            return 1
+            ;;
+    esac
+}
+
+
 ygg(){
     local file="/etc/tor/torrc"
     
@@ -190,6 +226,9 @@ brupd-info(){
 
         echo -e "14. Включить / выключить / использовать только yggdrasil мосты: \e[38;5;51mygg [on|off|only]\033[0m\n"
 
+        echo -e "15. Включить / выключить автоматические попытки получить мосты напрямую (для службы)," 
+        echo -e "    если tor недоступен / проверить статус: \e[38;5;51mbrupd-tor-onfailure [brupd|none|status]\033[0m\n"
+
         echo -e "Наслаждайся. \n"
         return
     fi
@@ -240,6 +279,9 @@ brupd-info(){
         echo -e "    Journal:    \e[38;5;51mjournal [bootstrap|all] [-i]\033[0m\n"
 
         echo -e "14. To enable/disable yggdrasil bridges / use only yggdrasil bridges, run: \e[38;5;51mygg [on|off|only]\033[0m\n"
+
+        echo -e "15. To enable/disable automatic attempts to fetch the bridges directly," 
+        echo -e "    if brupd-tor.service fails / check the current status: \e[38;5;51mbrupd-tor-onfailure [brupd|none|status]\033[0m\n"
 
         echo -e "Enjoy. \n"
         return
