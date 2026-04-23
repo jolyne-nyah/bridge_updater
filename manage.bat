@@ -23,7 +23,8 @@ echo 1. UP (Start)
 echo 2. HALT (Stop)
 echo 3. DESTROY (Delete)
 echo 4. STATUS
-echo 5. EXIT
+echo 5. SSH (Enter)
+echo 6. EXIT
 echo ===============================
 set /p choice="Enter your choice (1-5): "
 
@@ -46,5 +47,10 @@ if "%choice%"=="4" (
     pause
     goto menu
 )
-if "%choice%"=="5" exit
+if "%choice%"=="5" (
+    vagrant ssh
+    pause
+    goto menu
+)
+if "%choice%"=="6" exit
 goto menu

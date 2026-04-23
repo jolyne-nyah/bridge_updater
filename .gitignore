@@ -2,7 +2,7 @@
 # This program comes with ABSOLUTELY NO WARRANTY.
 # See <https://gnu.org> for details.
 
-/bridge_updater
+/source/core/bridge_updater
 *.json
 !conf_example.json
 !config.schema.json

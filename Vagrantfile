@@ -23,12 +23,14 @@ Vagrant.configure("2") do |config|
             vb.gui      = false
         end
 
-        config.vm.synced_folder ".", "/home/vagrant/source", owner: "vagrant", group: "vagrant"
+        config.vm.synced_folder "./source", "/home/vagrant/source", owner: "vagrant", group: "vagrant"
+        config.vm.synced_folder "./vagrant", "/home/vagrant/misc", owner: "vagrant", group: "vagrant"
 
         config.vm.provision "shell", inline: <<-SHELL
             
             echo "=== Basic provisioning the Tor Proxy Server VM... ==="
 
+            #creating swapfile
             echo -e "\nSECTION: CREATING SWAPFILE\n"
 
             fallocate -l 1G /swapfile
@@ -82,35 +84,35 @@ Vagrant.configure("2") do |config|
 
             #export configs from source
             
-            cp /home/vagrant/source/vagrant/brupd_conf.json /etc/brupd_conf.json
+            cp /home/vagrant/misc/brupd_conf.json /etc/brupd_conf.json
+
+            cp /home/vagrant/misc/brupd.service /etc/systemd/system/brupd.service
+            cp /home/vagrant/misc/brupd.timer /etc/systemd/system/brupd.timer
             
-            cp /home/vagrant/source/vagrant/brupd.service /etc/systemd/system/brupd.service
-            cp /home/vagrant/source/vagrant/brupd.timer /etc/systemd/system/brupd.timer
+            cp /home/vagrant/misc/brupd-tor.service /etc/systemd/system/brupd-tor.service
+            cp /home/vagrant/misc/brupd-tor.timer /etc/systemd/system/brupd-tor.timer
             
-            cp /home/vagrant/source/vagrant/brupd-tor.service /etc/systemd/system/brupd-tor.service
-            cp /home/vagrant/source/vagrant/brupd-tor.timer /etc/systemd/system/brupd-tor.timer
-            
-            cat /home/vagrant/source/vagrant/torrc | tee -a /etc/tor/torrc > /dev/null
+            cat /home/vagrant/misc/torrc | tee -a /etc/tor/torrc > /dev/null
 
             #brupd-tor onfailure std status
             touch /etc/brupd-onfailure
 
             #sysctl keepalive settings
-            cp /home/vagrant/source/vagrant/99-tcp-keepalive.conf /etc/sysctl.d/99-tcp-keepalive.conf
+            cp /home/vagrant/misc/99-tcp-keepalive.conf /etc/sysctl.d/99-tcp-keepalive.conf
             sysctl -p /etc/sysctl.d/99-tcp-keepalive.conf
 
 
             #binary installation
             echo -e "\nSECTION: BRIDGE_UPDATER BINARY INSTALLATION \n"
 
-            cd /home/vagrant/source
+            cd /home/vagrant/source/core
             go build -o /usr/local/bin/bridge_updater
             cd /home/vagrant
 
             echo -e "\nSECTION: BRIDGE_UPDATER BINARY INSTALLATION FINISHED\n"
 
             #comfy comfy usage binds and user guide
-            cat /home/vagrant/source/vagrant/bind.sh | tee -a /home/vagrant/.bashrc > /dev/null
+            cat /home/vagrant/misc/bind.sh | tee -a /home/vagrant/.bashrc > /dev/null
 
             #apparmor configuration
             echo '/etc/tor/torrc.d/ r,' | sudo tee -a /etc/apparmor.d/local/system_tor > /dev/null
@@ -207,7 +209,7 @@ Vagrant.configure("2") do |config|
 
             #copy yggdrasil bridges and reconfigure tor            
 
-            cp /home/vagrant/source/vagrant/yggbr.conf /etc/tor/yggbr.conf
+            cp /home/vagrant/misc/yggbr.conf /etc/tor/yggbr.conf
             sed -i 's|^#%include /etc/tor/yggbr.conf|%include /etc/tor/yggbr.conf|' /etc/tor/torrc
 
             systemctl reload tor@default

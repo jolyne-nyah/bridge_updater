@@ -15,7 +15,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 
-	l "github.com/jolyne-nyah/bridge_updater/logger"
+	l "github.com/jolyne-nyah/bridge_updater/core/logger"
 )
 
 type Config = ConfigSchemaJson

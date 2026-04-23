@@ -1,4 +1,4 @@
-module github.com/jolyne-nyah/bridge_updater
+module github.com/jolyne-nyah/bridge_updater/core
 
 go 1.26.1
 

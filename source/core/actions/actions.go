@@ -7,8 +7,8 @@ package actions
 import (
 	"os/exec"
 
-	c "github.com/jolyne-nyah/bridge_updater/config"
-	l "github.com/jolyne-nyah/bridge_updater/logger"
+	c "github.com/jolyne-nyah/bridge_updater/core/config"
+	l "github.com/jolyne-nyah/bridge_updater/core/logger"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 )

@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"time"
 
-	l "github.com/jolyne-nyah/bridge_updater/logger"
+	l "github.com/jolyne-nyah/bridge_updater/core/logger"
 	"go.uber.org/zap"
 	"golang.org/x/net/proxy"
 )
@@ -103,7 +103,7 @@ func (c *Checker) checkInternetReachabilityOneshot(logger *zap.Logger) bool {
 				return
 			}
 
-			conn.Close()
+			defer func() { _ = conn.Close() }()
 			logger.Debug(l.Bold("[section: internet]")+" connection to target is successful", zap.String("target", t))
 
 			select {
