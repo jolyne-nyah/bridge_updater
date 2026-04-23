@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
             echo -e "\nSECTION: PACKAGES INSTALLATION \n"
 
             apt-get update
-            DEBIAN_FRONTEND=noninteractive apt-get install -y tor nyx curl git obfs4proxy jq
+            DEBIAN_FRONTEND=noninteractive apt-get install -y tor nyx curl git obfs4proxy jq unzip
 
             echo -e "\nSECTION: PACKAGES INSTALLATION FINISHED"
 
@@ -160,52 +160,28 @@ Vagrant.configure("2") do |config|
 
             echo -e "\nSECTION: FIREWALL CONFIGURATION FINISHED"
 
-            #build-essential installation
-            echo -e "\nSECTION: BUILD-ESSENTIAL INSTALLATION\n"
-            DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential
-            echo -e "\nBUILD-ESSENTIAL INSTALLATION FINISHED"
-
-            #rust installation
-            echo -e "\nSECTION: RUST INSTALLATION\n"
-
-            curl -sSf https://sh.rustup.rs -o rustup-init.sh
-            chmod +x rustup-init.sh
-            ./rustup-init.sh -y --profile minimal
-            source "$HOME/.cargo/env"
-            rm rustup-init.sh
-
-            echo -e "\nSECTION: RUST INSTALLATION FINISHED"
-
             #peers_updater installation
             echo -e "\nSECTION: PEERS_UPDATER INSTALLATION AND FETCHING PEERS\n"
 
-            REPO_URL="https://github.com/ygguser/peers_updater"
-            DEST_DIR="/usr/local/src/peers_updater"
-
-            mkdir -p "$DEST_DIR"
-            git clone "$REPO_URL" "$DEST_DIR"
-            cd "$DEST_DIR"
-            cargo build --release
-
-            cd target/release
-            mv peers_updater /usr/local/bin/peers_updater
-
             cd /home/vagrant
-            rm -rf $DEST_DIR
+
+            curl -L https://github.com/ygguser/peers_updater/releases/download/0.3.4/x86_64-unknown-linux-gnu.zip -o peers_updater.zip
+
+            unzip peers_updater.zip -d peers_updater
+            cd peers_updater
+
+            mv peers_updater /usr/local/bin/peers_updater
+            
+            cd /home/vagrant
+
+            rm -rf peers_updater
+            rm -f peers_updater.zip
 
             /usr/local/bin/peers_updater -c /etc/yggdrasil/yggdrasil.conf -n 35 -I russia -u;
             
             systemctl restart yggdrasil
 
             echo -e "\nSECTION: PEERS_UPDATER INSTALLATION AND FETCHING PEERS FINISHED"
-
-            #rust deinstallation
-            echo -e "\nSECTION: RUST & BUILD-ESSENTIAL DEINSTALLATION\n"
-
-            rustup self uninstall -y
-            apt-get purge -y build-essential && apt-get autoremove -y
-
-            echo -e "\nSECTION: RUST & BUILD-ESSENTIAL DEINSTALLATION FINISHED\n"
 
             #copy yggdrasil bridges and reconfigure tor            
 
