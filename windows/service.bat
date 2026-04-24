@@ -3,23 +3,24 @@
 :: See <https://gnu.org> for details.
 
 @echo off
-cd /d "%~dp0"
-setlocal enabledelayedexpansion
 
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo [ERROR] Run as Administrator!
-    pause
+    echo [INFO] Requesting administrator rights...
+    powershell -Command "Start-Process -FilePath '%0' -Verb RunAs"
     exit /b
 )
 
-set "TASK_NAME=VagrantHiddenStart"
+cd /d "%~dp0"
+setlocal enabledelayedexpansion
+
+set "TASK_NAME=TorProxyStartup"
 set "UP_BAT=%~dp0up.bat"
 
 :menu
 cls
 echo ==================================================
-echo       VAGRANT SERVICE MANAGER (OLD SCHOOL)
+echo       TORPROXY SERVICE MANAGER
 echo ==================================================
 echo  1. Set up autostart (5s delay, Limited User)
 echo  2. Remove task
@@ -41,7 +42,7 @@ set "RUN_CMD=cmd.exe /c timeout /t 5 /nobreak >nul && \"!UP_BAT!\""
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c !RUN_CMD!'; $trigger = New-ScheduledTaskTrigger -AtLogon; $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited; $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable; Register-ScheduledTask -TaskName '!TASK_NAME!' -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Force"
 
 if %errorlevel% equ 0 (
-    echo [OK] Task created. It will show a black window for 5s on login.
+    echo [OK] Task created.
 ) else (
     echo [!] Failed.
 )

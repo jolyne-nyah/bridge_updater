@@ -3,7 +3,7 @@
 :: See <https://gnu.org> for details.
 
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0.."
 
 net session >nul 2>&1
 if %errorLevel% == 0 (
@@ -13,7 +13,7 @@ if %errorLevel% == 0 (
     exit /b
 )
 
-title Vagrant SSH Terminal
+title TorProxy SSH Terminal
 echo [VAGRANT] Connecting to the machine...
 echo.
 vagrant ssh

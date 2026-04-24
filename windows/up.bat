@@ -1,9 +1,9 @@
 :: Copyright (C) 2026 jolyne-nyah. Licensed under GNU GPL v3.
 :: This program comes with ABSOLUTELY NO WARRANTY.
 :: See <https://gnu.org> for details.
- 
+
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0.."
 
 net session >nul 2>&1
 if %errorLevel% == 0 (
@@ -13,8 +13,8 @@ if %errorLevel% == 0 (
     exit /b
 )
 
-echo [VAGRANT] Destroying the virtual machine... 
-vagrant destroy -f
+echo [VAGRANT] Starting the virtual machine...
+vagrant up
 echo.
 echo [STATUS] Current status:
 vagrant status

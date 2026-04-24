@@ -171,6 +171,7 @@ ygg(){
 
     else
         echo -e "Usage: \e[38;5;51mygg [on|off|only]\033[0m"
+        return
     fi
 
     sudo systemctl reload tor@default > /dev/null 2>&1

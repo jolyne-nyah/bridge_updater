@@ -40,7 +40,7 @@ Almost all the apps that are compatible with custom proxy settings can use this 
   - Anthropic: yes.
   - TikTok: yes.
   - Youtube: yes. Important: if you use [zapret-discord-youtube](https://github.com/Flowseal/zapret-discord-youtube), then turn off the tor proxy for the browser where you're going to watch Youtube, or turn off zapret, or use two different browsers: one for Youtube (with no proxy) and another one for other resources (with proxy).
-  - Tor Browser: yes. Just enter the machine via `vagrant ssh` or `enter.bat`, type command `bridges`, then copy and paste some of them into the bridges section in connection settings (check the Vagrant Machine Management Guide topic below). Don't use `127.0.0.1:6969` as a proxy in Tor Browser!
+  - Tor Browser: yes. Just enter the machine via `vagrant ssh` or `windows/enter.bat`, type command `bridges`, then copy and paste some of them into the bridges section in connection settings (check the Vagrant Machine Management Guide topic below). Don't use `127.0.0.1:6969` as a proxy in Tor Browser!
   - .onion addresses: possible, but strongly discouraged. Use Tor Browser instead.
   - Spotify, Soundcloud: possible, but not comfortable. Better use any VLESS client in proxy mode (to keep this proxy fast) instead.
   - Any russian service (Ozon, Wildberries, Yandex,..): no.
@@ -79,10 +79,10 @@ The project includes a Vagrant-based virtual environment for easy deployment and
 
 ### Windows
 
-1. Install Vagrant and VirtualBox manually or run `install.bat` in the project root folder with administrator rights.
+1. Install Vagrant and VirtualBox manually or run `windows/install.bat` in the project root folder with administrator rights.
 2. Reboot the computer (if necessary).
-3. Run `up.bat` to bring up the virtual machine.
-4. Connect to it by running `enter.bat`.
+3. Run `windows/up.bat` to bring up the virtual machine.
+4. Connect to it by running `windows/enter.bat`.
 5. Done.
 
 ### Linux
@@ -203,12 +203,12 @@ Use standard Vagrant commands in the terminal:
 
 For convenience on Windows, .bat scripts are provided:
 
-- `up.bat` — start the virtual machine
-- `halt.bat` — stop the virtual machine
-- `destroy.bat` — delete the virtual machine
-- `enter.bat` — connect to the machine via SSH
-- `manage.bat` — open the interactive management menu (English and Russian support)
-- `service.bat` — manage auto-start (create a task to start on login)
+- `windows/up.bat` — start the virtual machine
+- `windows/halt.bat` — stop the virtual machine
+- `windows/destroy.bat` — delete the virtual machine
+- `windows/enter.bat` — connect to the machine via SSH
+- `windows/manage.bat` — open the interactive management menu
+- `windows/service.bat` — manage auto-start (create a task to start on login)
 
 ### Commands Inside the Virtual Machine
 

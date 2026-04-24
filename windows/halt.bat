@@ -3,6 +3,8 @@
 :: See <https://gnu.org> for details.
 
 @echo off
+cd /d "%~dp0.."
+
 net session >nul 2>&1
 if %errorLevel% == 0 (
     echo [ERROR] Running as Administrator is not allowed!

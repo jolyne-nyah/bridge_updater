@@ -3,7 +3,7 @@
 :: See <https://gnu.org> for details.
 
 @echo off
-cd /d "%~dp0"
+cd /d "%~dp0.."
 setlocal enabledelayedexpansion
 
 net session >nul 2>&1
@@ -17,7 +17,7 @@ if %errorLevel% == 0 (
 :menu
 cls
 echo ===============================
-echo   VAGRANT MANAGEMENT MENU
+echo   TORPROXY MANAGEMENT MENU
 echo ===============================
 echo 1. UP (Start)
 echo 2. HALT (Stop)
