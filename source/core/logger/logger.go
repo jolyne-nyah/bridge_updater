@@ -5,7 +5,10 @@
 package logger
 
 import (
+	"bytes"
 	"fmt"
+	"os/exec"
+	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -77,4 +80,16 @@ func InitLogger(levelStr string) (*zap.Logger, error) {
 
 func Bold(text string) string {
 	return "\033[1m" + text + "\033[0m"
+}
+
+func RunExternalCommand(logger *zap.Logger, cmd *exec.Cmd) error {
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		output := strings.TrimSpace(stderr.String())
+		return fmt.Errorf("%s: %s", err, output)
+	}
+	return nil
 }

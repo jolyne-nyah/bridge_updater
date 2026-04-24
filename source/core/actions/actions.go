@@ -40,7 +40,7 @@ func (a *Actions) ReloadTor(logger *zap.Logger) error {
 
 	cmd := exec.Command("systemctl", "reload", "tor")
 
-	err := cmd.Run()
+	err := l.RunExternalCommand(logger, cmd)
 
 	if err != nil {
 		logger.Error(l.Bold("[section: tools]")+" failed to reload Tor service", zap.Error(err))

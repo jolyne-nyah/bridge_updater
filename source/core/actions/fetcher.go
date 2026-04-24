@@ -25,7 +25,7 @@ func (f *Fetcher) fetchSingleRepo(repo string, logger *zap.Logger) error {
 	cmd := exec.Command("git", "pull")
 	cmd.Dir = repo
 
-	err := cmd.Run()
+	err := l.RunExternalCommand(logger, cmd)
 
 	if err != nil {
 		logger.Error(l.Bold("[section: repos]")+" failed to fetch from repository", zap.String("repo", repo), zap.Error(err))
@@ -62,9 +62,8 @@ func (f *Fetcher) fetchSingleLink(link string, dest string, logger *zap.Logger) 
 
 	logger.Debug(l.Bold("[section: direct]")+" fetching from link", zap.String("link", link), zap.String("dest", dest))
 
-	cmd := exec.Command("curl", "-s", "-f", link, "-o", dest)
-
-	err := cmd.Run()
+	cmd := exec.Command("curl", "-sS", "-f", link, "-o", dest)
+	err := l.RunExternalCommand(logger, cmd)
 
 	if err != nil {
 		logger.Error(l.Bold("[section: direct]")+" failed to fetch direct link", zap.String("link", link), zap.String("dest", dest), zap.Error(err))

@@ -115,8 +115,10 @@ func (c *Config) validateReposSection(logger *zap.Logger) error {
 			cmd := exec.Command("git", "rev-parse", "--is-inside-work-tree")
 			cmd.Dir = repo
 
-			if err = cmd.Run(); err != nil {
-				logger.Error(l.Bold("[section: repos]")+" Failed to validate repository", zap.String("repo", repo), zap.Error(err))
+			err = l.RunExternalCommand(logger, cmd)
+
+			if err != nil {
+				logger.Error(l.Bold("[section: repos]")+" failed to validate repository", zap.String("repo", repo), zap.Error(err))
 				return err
 			}
 

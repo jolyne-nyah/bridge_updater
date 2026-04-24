@@ -29,10 +29,10 @@ func processSpecificFlags(reposOnly bool, directOnly bool) (bool, bool, error) {
 
 func main() {
 
-	if os.Geteuid() != 0 {
-		fmt.Println("This command must be run as root.")
-		os.Exit(1)
-	}
+	//if os.Geteuid() != 0 {
+	//	fmt.Println("This command must be run as root.")
+	//	os.Exit(1)
+	//}
 
 	var configPath string
 	var logLevelStr string
@@ -144,10 +144,10 @@ func main() {
 	rootCmd.AddCommand(updateCmd, fetchCmd, writeCmd, checkCmd)
 
 	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
-	}
+		if logger != nil {
+			_ = logger.Sync()
+		}
 
-	if logger != nil {
-		_ = logger.Sync()
+		os.Exit(1)
 	}
 }
