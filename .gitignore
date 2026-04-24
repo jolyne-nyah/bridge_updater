@@ -6,9 +6,10 @@
 *.json
 !conf_example.json
 !config.schema.json
-!vagrant/brupd_conf.json
+!brupd_conf.json
 .vagrant
 .vscode
+.ansible
 test/
 /rel/
 *.log

@@ -20,8 +20,8 @@ Also: partially compatible with Zapret and almost compatible with VLESS clients.
 - This is a pet project for demonstration author's skills in working with `golang` (including goroutines usage), `git`, `bash`, and `vagrant`.
 - The author is not responsible for the use of this utility for malicious purposes or for bypassing blocks, and they do not welcome usage of the program this way.
 - The Vagrant virtual environment is provided for comfortable testing of `bridge_updater` exclusively, because it was developed for usage on Linux systems natively.
-- Yggdrasil bridges are used to provide stable connection to Tor for testing and demonstration of correct work of function `checkInternetReachabilityOneshot` from module `actions/checker.go` through the proxy, and functions from module `actions/fetcher.go` (through the proxy).
-- Usage cases of the program to get an access to public resources are listed to make testing more comfortable and to demonstrate corerct work of Tor, and, as a consequence, to demonstrate that `actions/writer.go` module works fine with Tor configuration.
+- Yggdrasil bridges are used to provide stable connection to Tor for testing and demonstration of correct work of function `checkInternetReachabilityOneshot` from module `source/core/actions/checker.go` through the proxy, and functions from module `source/core/actions/fetcher.go` (through the proxy).
+- Usage cases of the program to get an access to public resources are listed to make testing more comfortable and to demonstrate corerct work of Tor, and, as a consequence, to demonstrate that `source/core/actions/writer.go` module works fine with Tor configuration.
 - The case of this program usage to make the Tor Browser get an access to the Tor is given to demonstrate the correct processing the bridges fetched by the program.
 
 ## Cases of usage
@@ -52,7 +52,7 @@ The project includes a Vagrant-based virtual environment for easy deployment and
 ### Additional Details
 
 - Tor proxy IPv6 support is enabled by default. If necessary, you can disable it by commenting out the necessary lines in vagrant/torrc.
-- If you need to manually edit the configuration for `bridge_updater` before starting the machine, it is located in: `vagrant/brupd_conf.json`. By default, several sources for obfs4 bridges are configured there.
+- If you need to manually edit the configuration for `bridge_updater` before starting the machine, it is located in: `provision/misc/brupd_conf.json`. By default, several sources for obfs4 bridges are configured there.
 - Currently, webtunnel bridges are not supported for the Vagrant machine.
 - It is not recommended to use vanilla bridges.
 - In the very worst case, when all the fetched bridges are unacessible, the bridges in Yggdrasil network support is also provided. You can disable it by: `ygg off`
@@ -116,7 +116,7 @@ The utility supports the following commands:
 
 ## Manual Configuration
 
-The configuration file must comply with the JSON schema embedded in the project. An example configuration is in `config/conf_example.json`.
+The configuration file must comply with the JSON schema embedded in the project. An example configuration is in `source/core/conf_example.json`.
 
 ### `direct`
 
