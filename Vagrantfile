@@ -25,6 +25,7 @@ Vagrant.configure("2") do |config|
 
         config.vm.synced_folder "./source", "/home/vagrant/source", owner: "vagrant", group: "vagrant"
         config.vm.synced_folder "./provision/misc", "/home/vagrant/misc", owner: "vagrant", group: "vagrant"
+        config.vm.synced_folder "./build", "/home/vagrant/build", owner: "vagrant", group: "vagrant"
 
         config.vm.provision "shell", path: "./provision/stage1.sh", privileged: true
         config.vm.provision "shell", path: "./provision/stage2.sh", privileged: true

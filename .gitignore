@@ -2,14 +2,17 @@
 # This program comes with ABSOLUTELY NO WARRANTY.
 # See <https://gnu.org> for details.
 
-/source/core/bridge_updater
+/source/bridge_updater/bridge_updater
+/source/vm_manage/vmm
 *.json
+/source/go.work
+/source/go.work.sum
 !conf_example.json
 !config.schema.json
 !brupd_conf.json
 .vagrant
 .vscode
 .ansible
-test/
-/rel/
+build/*
+!build/.gitkeep
 *.log

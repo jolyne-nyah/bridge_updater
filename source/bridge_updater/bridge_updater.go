@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
-	c "github.com/jolyne-nyah/bridge_updater/core/config"
-	l "github.com/jolyne-nyah/bridge_updater/core/logger"
+	c "github.com/jolyne-nyah/bridge_updater/source/bridge_updater/config"
+	l "github.com/jolyne-nyah/bridge_updater/source/bridge_updater/logger"
 )
 
 func processSpecificFlags(reposOnly bool, directOnly bool) (bool, bool, error) {

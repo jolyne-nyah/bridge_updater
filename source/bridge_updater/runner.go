@@ -10,8 +10,8 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 
-	a "github.com/jolyne-nyah/bridge_updater/core/actions"
-	c "github.com/jolyne-nyah/bridge_updater/core/config"
+	a "github.com/jolyne-nyah/bridge_updater/source/bridge_updater/actions"
+	c "github.com/jolyne-nyah/bridge_updater/source/bridge_updater/config"
 )
 
 const (

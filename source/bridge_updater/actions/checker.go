@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"time"
 
-	l "github.com/jolyne-nyah/bridge_updater/core/logger"
+	l "github.com/jolyne-nyah/bridge_updater/source/bridge_updater/logger"
 	"go.uber.org/zap"
 	"golang.org/x/net/proxy"
 )

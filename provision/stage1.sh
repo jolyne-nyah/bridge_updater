@@ -33,7 +33,15 @@ echo -e "\nSECTION: APT TRANSPORT SWITCH FINISHED"
 echo -e "\nSECTION: PACKAGES INSTALLATION \n"
 
 apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install -y tor nyx curl git obfs4proxy jq unzip
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    tor \
+    nyx \
+    curl \
+    git \
+    obfs4proxy \
+    jq \
+    unzip \
+    make
 
 echo -e "\nSECTION: PACKAGES INSTALLATION FINISHED"
 
@@ -75,12 +83,16 @@ touch /etc/brupd-onfailure
 cp /home/vagrant/misc/99-tcp-keepalive.conf /etc/sysctl.d/99-tcp-keepalive.conf
 sysctl -p /etc/sysctl.d/99-tcp-keepalive.conf
 
-
 #binary installation
 echo -e "\nSECTION: BRIDGE_UPDATER BINARY INSTALLATION \n"
 
-cd /home/vagrant/source/core
-go build -o /usr/local/bin/bridge_updater
+cd /home/vagrant/source
+make all
+
+cd /home/vagrant/build
+mv bridge_updater /usr/local/bin/bridge_updater
+chmod +x /usr/local/bin/bridge_updater
+
 cd /home/vagrant
 
 echo -e "\nSECTION: BRIDGE_UPDATER BINARY INSTALLATION FINISHED\n"
